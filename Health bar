@@ -1,5 +1,5 @@
 
-
+if game.PlaceId == 5094651510 then
 local ScreenGui = Instance.new("ScreenGui")
 local TextLabel = Instance.new("TextLabel")
 local TextLabel_Roundify_61px = Instance.new("ImageLabel")
@@ -50,3 +50,4 @@ RunService.RenderStepped:Connect(function()
 		
 	end
 end)
+end
