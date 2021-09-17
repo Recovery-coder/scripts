@@ -1,0 +1,145 @@
+local items = {}
+selecteditem = ""
+
+local LP = game.Players.LocalPlayer
+
+
+for i,v in pairs(game:GetService("Workspace").Drops.Active:GetChildren()) do 
+    if not table.find(items,v.Name) then
+        table.insert(items,v.Name) 
+end
+end
+
+local UILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Recovery-coder/UI-LIb/main/Twinkle"))()
+
+local MainUI = UILibrary.Load("scary")
+local FirstPage = MainUI.AddPage("Weapon")
+local SecondPage = MainUI.AddPage("Doors")
+local ThirdPage = MainUI.AddPage("Local Player")
+
+local FirstButton = FirstPage.AddButton("tp to rokaka", function()
+for i,v in pairs(game:GetService("Workspace").Drops.Active:GetDescendants()) do 
+if v.Name == "Rokakaka" then
+
+ LP.Character.HumanoidRootPart.Position = v.Position 
+end
+end    
+end)
+
+local FirstButton = FirstPage.AddButton("tp to arrow", function()
+for i,v in pairs(game:GetService("Workspace").Drops.Active:GetDescendants()) do 
+if v.Name == "Fledge" then
+
+ LP.Character.HumanoidRootPart.Position = v.Position 
+end
+end    
+end)
+local FirstButton = FirstPage.AddButton("tp to storage", function()
+for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do 
+if v.Name == "Robert Speedwagon" then
+    
+
+ LP.Character.HumanoidRootPart.Position = v.Head.Position 
+end
+end    
+end)
+local FirstButton = FirstPage.AddButton("Item notifier", function()
+game:GetService("Workspace").Drops.Active.ChildAdded:Connect(function(instance)
+  local StarterGui = game:GetService("StarterGui")
+
+		StarterGui:SetCore("SendNotification", {
+			Title = "System Notification",
+			Text = instance.Name,
+			Duration = 5
+		})
+		
+		
+	
+end)
+end)
+
+local FirstToggle = FirstPage.AddToggle("Roka Smipper", false, function(v)
+_G.peed = v
+while true do 
+wait()    
+if not _G.peed then return end
+for i,v in pairs(game:GetService("Workspace").Drops.Active:GetDescendants()) do 
+if v.Name == "Rokakaka" then
+  pcall(function()
+ LP.Character.HumanoidRootPart.Position = v.Position 
+ fireproximityprompt(v.ProximityPrompt)
+ end)
+end
+end    
+
+end
+
+end)
+
+local FirstToggle = FirstPage.AddToggle("Arrow Sniper", false, function(v)
+_G.peed1 = v
+while true do 
+wait()    
+if not _G.peed1 then return end
+for i,v in pairs(game:GetService("Workspace").Drops.Active:GetDescendants()) do 
+if v.Name == "Fledge" then
+  pcall(function()
+ LP.Character.HumanoidRootPart.Position = v.Position 
+ fireproximityprompt(v.Parent.ProximityPrompt)
+ end)
+end
+end    
+
+end
+
+end)
+
+local FirstToggle = FirstPage.AddToggle("all items Sniper", false, function(v)
+_G.peed2 = v
+coroutine.wrap(function()
+  
+repeat
+wait()    
+if not _G.peed2 then return end
+for i,v in pairs(game:GetService("Workspace").Drops.Active:GetDescendants()) do
+  if v:IsA("Part")  then
+  local distance = (v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+  if distance >= 1000000000000 then 
+  return end    
+  
+      pcall(function()
+      game.Players.LocalPlayer.Character.HumanoidRootPart.Position = v.Position
+      fireproximityprompt(v.Parent.ProximityPrompt)
+      end)
+  end
+end
+
+until not _G.peed2
+end)()
+end)
+
+
+
+local waypoints = {}
+local selectedwaypoint = ""
+
+for i,v in pairs(game:GetService("Workspace").QuestIndicators:GetChildren()) do
+    if not table.find(waypoints,v.Name) then
+        table.insert(waypoints,v.Name)
+end
+end
+
+
+
+local FirstDropdown = FirstPage.AddDropdown("Waypoints tp", waypoints, function(v)
+selectedwaypoint = v
+end)
+local FirstButton = FirstPage.AddButton("Teleport", function()
+for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do 
+if v.Name == selectedwaypoint then
+  pcall(function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.Position = v.Position
+end)
+end
+end  
+end)
