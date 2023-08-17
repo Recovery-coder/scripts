@@ -1,10 +1,12 @@
+local Thirst = "idk"
+
+
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 local ScriptVersion = "0.0.1"
-local player = game:GetService("Players").LocalPlayer.Name
-local speed = 1
-
+local player = game:GetService("Players").LocalPlayer
+local speed = 100
 
 local Window = Fluent:CreateWindow({
     Title = "rec.xyz " .. ScriptVersion,
@@ -20,6 +22,8 @@ local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     AutoQuest = Window:AddTab({ Title = "AutoQuest", Icon = "newspaper" }),
     Shadow = Window:AddTab({ Title = "Shadow Farm", Icon = "person-standing" }),
+    AutoEat = Window:AddTab({ Title = "Auto Eat", Icon = "carrot" }),
+    Misc = Window:AddTab({ Title = "Misc", Icon = "rotate-3d" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
@@ -27,6 +31,7 @@ local Options = Fluent.Options
 
 do
 --//Quest tab -672.6984252929688, 1230.419189453125, -817.7157592773438
+ 
  Tabs.AutoQuest:AddButton({
         Title = "Quest Spot",
         Description = "Tweens you to the quest.",
@@ -38,8 +43,14 @@ do
                     {
                         Title = "Confirm",
                         Callback = function()
-                            print("Confirmed the dialog.")
-                           tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(speed, Enum.EasingStyle.Linear)
+local char = game.Players.LocalPlayer.Character
+local pos = Vector3.new(-672.6984252929688, 1230.419189453125, -817.7157592773438)
+local hm = char.HumanoidRootPart
+local dist = (hm.Position - pos).magnitude
+local tweenspeed = dist/tonumber(speed)
+                          
+                          print("Confirmed the dialog.")
+                           tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
                            tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-672.6984252929688, 1230.419189453125, -817.7157592773438)})
                             tween:Play()
                         end
@@ -57,9 +68,9 @@ do
     local Slider = Tabs.AutoQuest:AddSlider("Slider", {
         Title = "Tween Speed",
         Description = "Change it if ur getting kicked.",
-        Default = 1,
+        Default = 100,
         Min = 1,
-        Max = 5,
+        Max = 100,
         Rounding = 0,
         Callback = function(Value)
             print("Slider was changed:", Value)
@@ -71,7 +82,7 @@ do
         print("Slider changed:", Value)
     end)
 
-    Slider:SetValue(3)
+    Slider:SetValue(100)
     
    local Toggle = Tabs.AutoQuest:AddToggle("MyToggles", {Title = "Toggle AutoQuest", Default = false })
 
@@ -80,10 +91,9 @@ do
     
     
     Toggle:OnChanged(function()
-    tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(speed, Enum.EasingStyle.Linear)
+    tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1, Enum.EasingStyle.Linear)
   print("Toggle changed:", Options.MyToggles.Value)
   local player = game.Players.LocalPlayer
-local speed = 10 -- set this lower to make it slower
 local bodyvelocityenabled = true -- set this to false if you are getting kicked
 local Imput = game:GetService("UserInputService")
 local Plr = game.Players.LocalPlayer
@@ -131,7 +141,122 @@ end
 Options.MyToggles:SetValue(false)
 
 --///Shadow Farm
+local Toggle = Tabs.Shadow:AddToggle("Shadow1", {Title = "Auto shadow buy", Default = false })
 
+    Toggle:OnChanged(function()
+  print("Toggle changed:", Options.Shadow1.Value)
+
+while Options.Shadow1.Value do
+local shadow = player.Backpack:FindFirstChild("Shadow Training")
+if shadow then
+player.Character.Humanoid:EquipTool(shadow)
+shadow:Activate()
+task.wait(36)
+else
+print("not foundd")
+fireclickdetector(game.Workspace.Game.Buyables["Shadow Training1"].Head.ClickDetector)
+end
+wait()
+end
+    end)
+
+    Options.Shadow1:SetValue(false)
+local Toggle = Tabs.Shadow:AddToggle("Shadow2", {Title = "Auto shadow hit", Default = false })
+
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Options.Shadow2.Value)
+        function followshadow()
+local player = game.Players.LocalPlayer
+local hm = player.Character.HumanoidRootPart
+local Combat = player.Backpack:FindFirstChild("Fists")
+player.Character.Humanoid:EquipTool(Combat)
+for i,p in pairs(game.workspace.Live:GetChildren()) do
+if p.Name == "Shadow." then
+if p:WaitForChild("HumanoidRootPart") then
+print(p.HumanoidRootPart)
+hm.CFrame = CFrame.lookAt(hm.Position, Vector3.new(p.HumanoidRootPart.Position.X, hm.Position.Y, p.HumanoidRootPart.Position.Z))
+end
+end
+end
+end
+while Options.Shadow2.Value do
+followshadow()
+task.wait()
+end
+    end)
+
+    Options.Shadow2:SetValue(false)
+   
+   
+   
+--///misc
+ Tabs.Misc:AddParagraph({
+        Title = "Vip Server",
+        Content = ""
+    })
+ Tabs.Misc:AddButton({
+        Title = "Vip Platform",
+        Description = "Spawns a platform where u can train, In a vip server.",
+        Callback = function()
+         local part = Instance.new("Part")
+part.Name = "vip platform"
+part.Size = Vector3.new(1525.39990234375, 2, 1174.0999755859375)
+part.Position = Vector3.new(-157.70355224609375, 1224.9239501953125, -664.3065795898438)
+part.Anchored = true
+part.BrickColor = BrickColor.new("Crimson")
+part.Material = "Neon"
+part.Transparency = 0.5
+part.Parent = workspace   
+        end
+    })
+Tabs.Misc:AddButton({
+        Title = "Tp to platform",
+        Description = "Takes you there...",
+        Callback = function()
+         local hm = player.Character.HumanoidRootPart
+         local portal = workspace.Game.TP_Things.GangBase["1"]
+         portal.CFrame = hm.CFrame*CFrame.new(Vector3.new(hm.CFrame,0,-10))
+        end
+    })  
+    
+    
+--/// auto eat
+    local MultiDropdown = Tabs.AutoEat:AddDropdown("MultiDropdown", {
+        Title = "Auto Eat",
+        Description = "You can select multiple Foods.",
+        Values = {"Hotdog", "Chips", "Chocolate Donut", "Ramen", "Fried Rice", "Rice Balls", "Chocolate Glazed Donut", "Pizza", "Meatballs", "Protein Bar", "Pretzel"},
+        Multi = true,
+        Default = {},
+    })
+
+
+    MultiDropdown:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        print("Mutlidropdown changed:", table.concat(Values, ", "))
+    end)
+  
+local MultiDropdown = Tabs.AutoEat:AddDropdown("MultiDropdown", {
+        Title = "Auto Drink",
+        Description = "You can select multiple Foods.",
+        Values = {"Cola", "Sports Drink", "Vanilla Icecream", "Strawberry Icecream", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
+        Multi = true,
+        Default = {},
+    })
+
+
+    MultiDropdown:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        print("Mutlidropdown changed:", table.concat(Values, ", "))
+    end)   
+   
+   
+   
    
    
    
@@ -140,7 +265,7 @@ Options.MyToggles:SetValue(false)
    Fluent:Notify({
         Title = "Notification",
         Content = "Welcome"  ,
-        SubContent = player , -- Optional
+        SubContent = player.Name , -- Optional
         Duration = 5 -- Set to nil to make the notification not disappear
     })
 
