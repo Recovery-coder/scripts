@@ -1,4 +1,9 @@
-local Thirst = "idk"
+local currentfoods =""
+local currentdrinks = ""
+
+local foodP 
+local drinkp 
+
 
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -21,6 +26,7 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     AutoQuest = Window:AddTab({ Title = "AutoQuest", Icon = "newspaper" }),
+    autoroad = Window:AddTab({ Title = "Auto Roadwork", Icon = "accessibility" }),
     Shadow = Window:AddTab({ Title = "Shadow Farm", Icon = "person-standing" }),
     AutoEat = Window:AddTab({ Title = "Auto Eat", Icon = "carrot" }),
     Misc = Window:AddTab({ Title = "Misc", Icon = "rotate-3d" }),
@@ -30,6 +36,20 @@ local Tabs = {
 local Options = Fluent.Options
 
 do
+--//Roadwork
+
+
+
+
+
+
+
+
+
+
+
+
+
 --//Quest tab -672.6984252929688, 1230.419189453125, -817.7157592773438
  
  Tabs.AutoQuest:AddButton({
@@ -236,12 +256,62 @@ Tabs.Misc:AddButton({
             table.insert(Values, Value)
         end
         print("Mutlidropdown changed:", table.concat(Values, ", "))
+        currentfoods = Values
     end)
-  
+  local Slider = Tabs.AutoEat:AddSlider("Slider", {
+        Title = "Hunger %",
+        Default = 50,
+        Min = 1,
+        Max = 100,
+        Rounding = 0,
+        Callback = function(Value)
+            print("Slider was changed:", Value)
+            foodP = Value
+        end
+    })
+
+    Slider:OnChanged(function(Value)
+        print("Slider changed:", Value)
+       
+    end)
+    
+    
+    local Toggle = Tabs.AutoEat:AddToggle("FoodToggle", {Title = "Toggle", Default = false })
+
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Options.FoodToggle.Value)
+while Options.FoodToggle.Value do
+local hungerGui = game.Players.LocalPlayer.PlayerGui.MainUI.Frame.HungerFront
+local guiSize2 = hungerGui.Size
+local originalWidth = 0.620999992
+local widthPercentage = (guiSize2.X.Scale / originalWidth) * 100
+local roundedWidthPercentage = math.round(widthPercentage)
+print(roundedWidthPercentage)
+if roundedWidthPercentage <= foodP then
+print('hi')
+for i,d in pairs(currentfoods) do
+for i,k in pairs(player.Backpack:GetChildren()) do 
+if k.Name == d then 
+local hm = player.Character.Humanoid
+hm:EquipTool(k)
+k:Activate()
+hm:UnequipTools(k)
+print(k)
+end
+
+end
+end
+end   
+wait()
+end
+    end)
+
+    Options.FoodToggle:SetValue(false)
+
 local MultiDropdown = Tabs.AutoEat:AddDropdown("MultiDropdown", {
         Title = "Auto Drink",
-        Description = "You can select multiple Foods.",
-        Values = {"Cola", "Sports Drink", "Vanilla Icecream", "Strawberry Icecream", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
+        Description = "You can select multiple Drinks.",
+        Values = {"Cola", "Sports Drink", "Vanilla Icecream", "Strawberry Icecream"},
         Multi = true,
         Default = {},
     })
@@ -253,8 +323,57 @@ local MultiDropdown = Tabs.AutoEat:AddDropdown("MultiDropdown", {
             table.insert(Values, Value)
         end
         print("Mutlidropdown changed:", table.concat(Values, ", "))
+        currentdrinks = Values
     end)   
-   
+ local Slider = Tabs.AutoEat:AddSlider("Slider", {
+    Title = "Thirst %",
+    Default = 50,
+    Min = 1,
+    Max = 100,
+    Rounding = 0,
+    Callback = function(Value)
+        print("Slider was changed:", Value)
+        drinkp = Value
+    end
+})
+
+    Slider:OnChanged(function(Value)
+        print("Slider changed:", Value)
+    end)
+     
+     
+     local Toggle = Tabs.AutoEat:AddToggle("DrinkToggle", {Title = "Toggle", Default = false })
+
+    Toggle:OnChanged(function()
+      print("Toggle changed:", Options.DrinkToggle.Value)
+while Options.DrinkToggle.Value do
+local drinkGui = game.Players.LocalPlayer.PlayerGui.MainUI.Frame.WaterFront
+local guiSize2 = drinkGui.Size
+local originalWidth = 0.620999992
+local widthPercentage = (guiSize2.X.Scale / originalWidth) * 100
+local roundedWidthPercentage = math.round(widthPercentage)
+print(roundedWidthPercentage)
+if roundedWidthPercentage <= tonumber(drinkp) then
+print('hi')
+for i,d in pairs(currentdrinks) do
+for i,k in pairs(player.Backpack:GetChildren()) do 
+if k.Name == d then 
+local hm = player.Character.Humanoid
+hm:EquipTool(k)
+k:Activate()
+hm:UnequipTools(k)
+print(k)
+end
+
+end
+end
+end
+wait()
+end
+
+    end)
+ Options.DrinkToggle:SetValue(false)
+
    
    
    
