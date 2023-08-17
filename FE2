@@ -58,14 +58,6 @@ local RSpeed = 100
     Slider:SetValue(100)
 
 Tabs.autoroad:AddButton({
-        Title = "Test",
-        Description = "Spawns a platform where u can train, In a vip server.",
-        Callback = function()
-         print(RSpeed)  
-        end
-    })
-
-Tabs.autoroad:AddButton({
         Title = "Roadwork Spot",
         Description = "Tweens you to the Roadwork.",
         Callback = function()
@@ -101,16 +93,61 @@ local tweenspeed = dist/tonumber(RSpeed)
 
 
 local Toggle = Tabs.autoroad:AddToggle("RoadToggle", {Title = "Toggle", Default = false })
+function getroadwork()
+local trainer = workspace.Game.NPCs["Muay Thai Trainer"].HumanoidRootPart.InteractPrompt
+fireproximityprompt(trainer)
+local args = {
+    [1] = {
+        ["choice"] = "Can you show me some of the avaliable trainings?"
+    }
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Dialogue"):FireServer(unpack(args))
+local args = {
+    [1] = {
+        ["choice"] = "Roadwork"
+    }
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Dialogue"):FireServer(unpack(args))
+local args = {
+    [1] = {
+        ["choice"] = "($45) Long Roadwork"
+    }
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Dialogue"):FireServer(unpack(args))
+local args = {
+    [1] = {
+        ["choice"] = "Exit"
+    }
+}
 
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Dialogue"):FireServer(unpack(args))
+end
     Toggle:OnChanged(function()
         print("Toggle changed:", Options.RoadToggle.Value)
-       
-       
+       if Options.RoadToggle.Value then
+       game.Players.LocalPlayer.Character.Humanoid.HipHeight = 4
+       else
+       game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
+       end
        
        while Options.RoadToggle.Value do
+        local char = game.Players.LocalPlayer.Character
+local pos = Vector3.new(-521.0875244140625, 1228.923583984375, -521.6842651367188)
+local hm = char.HumanoidRootPart
+local dist = (hm.Position - pos).magnitude
+local tweenspeed = dist/tonumber(RSpeed)
+        
+        local folder = game:GetService("Players").LocalPlayer.PlayerGui.TrainingGuis
+       if #folder:GetChildren() == 0 then
+         tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
+                           tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-521.0875244140625, 1228.923583984375, -521.6842651367188)})
+                            tween:Play()
+        print("hello")
+        getroadwork()
+    end
+       
+       
         for i,v in pairs(workspace.Game.Markers:GetChildren()) do
-
-        print(v)
         local char = game.Players.LocalPlayer.Character
 local pos = Vector3.new(v.Position)
 local hm = char.HumanoidRootPart
@@ -126,21 +163,18 @@ local Distance = (player.Character.PrimaryPart.Position - v.Position).magnitude 
 local Time = GetTime(Distance, Speed) -- Calculate the time
 
 
-
+game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
                          tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(Time, Enum.EasingStyle.Linear)
               tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(v.Position)})
                           tween:Play()
-                            print("going")
+                           
                           local playbackState = tween.Completed:Wait()
+                          print("going")
                           end
                      
                      
-                     
-                     tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(3, Enum.EasingStyle.Linear)
-                           tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-521.0875244140625, 1228.923583984375, -521.6842651367188)})
-                            tween:Play()
-                             local playbackState = tween.Completed:Wait()
-                          
+                    
+                         
        task.wait()
         end 
     end)
@@ -387,18 +421,14 @@ local widthPercentage = (guiSize2.X.Scale / originalWidth) * 100
 local roundedWidthPercentage = math.round(widthPercentage)
 print(roundedWidthPercentage)
 if roundedWidthPercentage <= foodP then
-print('hi')
-for i,d in pairs(currentfoods) do
-for i,k in pairs(player.Backpack:GetChildren()) do 
-if k.Name == d then 
-local hm = player.Character.Humanoid
-hm:EquipTool(k)
-k:Activate()
-hm:UnequipTools(k)
-print(k)
-end
-
-end
+for _, FoodName in pairs(currentfoods) do
+    local food = player.Backpack:FindFirstChild(FoodName) or player.Character:FindFirstChild(FoodName)
+    if food then
+        local hm = player.Character.Humanoid
+        hm:EquipTool(food)
+        food:Activate()
+        break -- Exit the loop after equipping and activating the first valid drink
+    end
 end
 end   
 wait()
@@ -453,18 +483,14 @@ local widthPercentage = (guiSize2.X.Scale / originalWidth) * 100
 local roundedWidthPercentage = math.round(widthPercentage)
 print(roundedWidthPercentage)
 if roundedWidthPercentage <= tonumber(drinkp) then
-print('hi')
-for i,d in pairs(currentdrinks) do
-for i,k in pairs(player.Backpack:GetChildren()) do 
-if k.Name == d then 
-local hm = player.Character.Humanoid
-hm:EquipTool(k)
-k:Activate()
-hm:UnequipTools(k)
-print(k)
-end
-
-end
+for _, drinkName in pairs(currentdrinks) do
+    local drink = player.Backpack:FindFirstChild(drinkName) or player.Character:FindFirstChild(drinkName)
+    if drink then
+        local hm = player.Character.Humanoid
+        hm:EquipTool(drink)
+        drink:Activate()
+        break -- Exit the loop after equipping and activating the first valid drink
+    end
 end
 end
 wait()
@@ -683,7 +709,7 @@ InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
 
 
-Window:SelectTab(1)
+Window:SelectTab(2)
 
 Fluent:Notify({
     Title = "rec.xyz",
