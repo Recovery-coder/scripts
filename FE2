@@ -37,15 +37,114 @@ local Options = Fluent.Options
 
 do
 --//Roadwork
+local RSpeed = 100
+ local Slider = Tabs.autoroad:AddSlider("Slider", {
+        Title = "Tween Speed",
+        Description = "Change it if ur getting kicked.",
+        Default = 100,
+        Min = 1,
+        Max = 200,
+        Rounding = 0,
+        Callback = function(Value)
+            print("Slider was changed:", Value)
+            RSpeed = Value
+        end
+    })
+
+    Slider:OnChanged(function(Value)
+        print("Slider changed:", Value)
+    end)
+
+    Slider:SetValue(100)
+
+Tabs.autoroad:AddButton({
+        Title = "Test",
+        Description = "Spawns a platform where u can train, In a vip server.",
+        Callback = function()
+         print(RSpeed)  
+        end
+    })
+
+Tabs.autoroad:AddButton({
+        Title = "Roadwork Spot",
+        Description = "Tweens you to the Roadwork.",
+        Callback = function()
+            Window:Dialog({
+                Title = "Tween",
+                Content = "Everyone will see this.",
+                Buttons = {
+                    {
+                        Title = "Confirm",
+                        Callback = function()
+local char = game.Players.LocalPlayer.Character
+local pos = Vector3.new(-521.0875244140625, 1228.923583984375, -521.6842651367188)
+local hm = char.HumanoidRootPart
+local dist = (hm.Position - pos).magnitude
+local tweenspeed = dist/tonumber(RSpeed)
+                          
+                          print("Confirmed the dialog.")
+                           tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
+                           tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-521.0875244140625, 1228.923583984375, -521.6842651367188)})
+                            tween:Play()
+                        end
+                    },
+                    {
+                        Title = "Cancel",
+                        Callback = function()
+                            print("Cancelled the dialog.")
+                        end
+                    }
+                }
+            })
+        end
+    })
+
+
+local Toggle = Tabs.autoroad:AddToggle("RoadToggle", {Title = "Toggle", Default = false })
+
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Options.RoadToggle.Value)
+       
+       
+       
+       while Options.RoadToggle.Value do
+        for i,v in pairs(workspace.Game.Markers:GetChildren()) do
+
+        print(v)
+        local char = game.Players.LocalPlayer.Character
+local pos = Vector3.new(v.Position)
+local hm = char.HumanoidRootPart
+local dist = (hm.Position - pos).magnitude
+local tweenspeed = dist/tonumber(RSpeed)
+local Speed = 70
+function GetTime(Distance, Speed)
+	-- Time = Distance / Speed
+	local Time = Distance / Speed
+	return Time
+end
+local Distance = (player.Character.PrimaryPart.Position - v.Position).magnitude -- Get the distance between the current position and the next node
+local Time = GetTime(Distance, Speed) -- Calculate the time
 
 
 
-
-
-
-
-
-
+                         tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(Time, Enum.EasingStyle.Linear)
+              tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(v.Position)})
+                          tween:Play()
+                            print("going")
+                          local playbackState = tween.Completed:Wait()
+                          end
+                     
+                     
+                     
+                     tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(3, Enum.EasingStyle.Linear)
+                           tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-521.0875244140625, 1228.923583984375, -521.6842651367188)})
+                            tween:Play()
+                             local playbackState = tween.Completed:Wait()
+                          
+       task.wait()
+        end 
+    end)
+ Options.RoadToggle:SetValue(false)
 
 
 
