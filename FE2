@@ -1,5 +1,14 @@
+ if not game:IsLoaded() then
+       game.Loaded:Wait()
+   end
+
+   for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) do
+       v:Disable()
+   end
+
 local currentfoods =""
 local currentdrinks = ""
+local currentbuff = ""
 
 local foodP 
 local drinkp 
@@ -439,6 +448,9 @@ if p.Name == "Shadow." then
 if p:WaitForChild("HumanoidRootPart") then
 print(p.HumanoidRootPart)
 hm.CFrame = CFrame.lookAt(hm.Position, Vector3.new(p.HumanoidRootPart.Position.X, hm.Position.Y, p.HumanoidRootPart.Position.Z))
+VirtualInputManager:SendMouseButtonEvent(1, 1, 0, true, game, 0)
+VirtualInputManager:SendMouseButtonEvent(1, 1, 0, false, game, 0)
+
 end
 end
 end
@@ -467,7 +479,7 @@ part.Name = "vip platform"
 part.Size = Vector3.new(1525.39990234375, 2, 1174.0999755859375)
 part.Position = Vector3.new(-157.70355224609375, 1224.9239501953125, -664.3065795898438)
 part.Anchored = true
-part.BrickColor = BrickColor.new("Crimson")
+part.BrickColor = BrickColor.new("Black")
 part.Material = "Neon"
 part.Transparency = 0.5
 part.Parent = workspace   
@@ -482,6 +494,15 @@ Tabs.Misc:AddButton({
          portal.CFrame = hm.CFrame*CFrame.new(Vector3.new(hm.CFrame,0,-10))
         end
     })  
+    
+    
+Tabs.Misc:AddButton({
+        Title = "Reset",
+        Description = "Resets player.",
+        Callback = function()
+player.Character.Head:Destroy()
+        end
+    })    
     
     
 --/// auto eat
@@ -610,7 +631,35 @@ end
     end)
  Options.DrinkToggle:SetValue(false)
 
-   
+local Dropdown = Tabs.AutoEat:AddDropdown("Dropdown", {
+        Title = "Auto buffs",
+        Description = "You can select a buff.",
+        Values = {"Protein Bar"},
+        Multi = false,
+     
+    })
+
+
+    Dropdown:OnChanged(function(Value)
+        print("Dropdown changed:", Value)
+        currentbuff = Value
+    end)   
+local Toggle = Tabs.AutoEat:AddToggle("Bufftoggle", {Title = "Toggle", Default = false })
+
+    Toggle:OnChanged(function()
+    print("Toggle changed:", Options.Bufftoggle.Value)
+    while Options.Bufftoggle.Value do
+    for i,v in pairs(player.Backpack:GetChildren()) do
+    if v.Name == currentbuff and not player.PlayerGui.MainUI.ImageLabel.FoodBuffs.ScrollingFrame:FindFirstChild("XP_Buff")  then
+    player.Character.Humanoid:EquipTool(v)
+    v:Activate()
+    end
+    end
+    task.wait()
+    end
+    end)
+
+    Options.Bufftoggle:SetValue(false)
    
    
    
