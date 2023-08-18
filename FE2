@@ -13,7 +13,7 @@ local Sparlocation
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
-local ScriptVersion = "0.0.1"
+local ScriptVersion = "0.0.5"
 local player = game:GetService("Players").LocalPlayer
 local speed = 100
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -53,18 +53,22 @@ Tabs.autospar:AddButton({
     })
 
 local Keybind = Tabs.autospar:AddKeybind("Keybind", {
-        Title = "KeyBind",
+        Title = "Spar toggle keybind",
         Mode = "Toggle", -- Always, Toggle, Hold
-        Default = "LeftControl", -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+        Default = "Home", -- String as the name of the keybind (MB1, MB2 for mouse buttons)
 
         -- Occurs when the keybind is clicked, Value is `true`/`false`
         Callback = function(Value)
-            print("Keybind clicked!", Value)
+            if Value then
+            Options.Spartoggle:SetValue(true)
+            else
+              Options.Spartoggle:SetValue(false)
+            end
         end,
 
         -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
         ChangedCallback = function(New)
-            print("Keybind changed!", New)
+        print("Keybind changed!", New)
         end
     })
 
@@ -97,7 +101,6 @@ hm:EquipTool(fist)
 VirtualInputManager:SendMouseButtonEvent(1, 1, 0, true, game, 1)
 VirtualInputManager:SendMouseButtonEvent(1, 1, 0, false, game, 1)
 else 
-print("too far")
 if Sparlocation == nill then
 else
 game.Players.LocalPlayer.Character.Humanoid:MoveTo(Sparlocation)
@@ -110,8 +113,6 @@ for i, spar in pairs(workspace.Game.Buyables:GetChildren()) do
     if spar.Name == "Spar Training" then
         local distance = (character.HumanoidRootPart.Position - spar.Head.Position).Magnitude
         if distance <= 10 and character:FindFirstChild("TRAINING_GLOVES [2372]") then
-            print(" gloves")
-            print(distance)
         elseif distance <= 10 and not sparr and not character:FindFirstChild("TRAINING_GLOVES [2372]") then
             fireclickdetector(spar.Head.ClickDetector)
             task.wait(0.5)
@@ -119,7 +120,6 @@ for i, spar in pairs(workspace.Game.Buyables:GetChildren()) do
             if sparr then
                 hm:EquipTool(sparr)
                 sparr:Activate()
-                print("pollo")
            end 
         end
     end
