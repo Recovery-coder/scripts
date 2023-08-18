@@ -90,6 +90,7 @@ tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweensp
 tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(p.Head.Position)})
  tween:Play()
  local playbackState = tween.Completed:Wait()
+ player.Character.Humanoid:UnequipTools()
  player.Character.HumanoidRootPart.Anchored = true
  fireclickdetector(game.Workspace.Game.Buyables[autobuy].Head.ClickDetector)
  repeat
