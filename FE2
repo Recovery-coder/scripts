@@ -379,7 +379,6 @@ bv.Velocity = Vector3.new(0,0,0)
 
 
 --//Quest tab -672.6984252929688, 1230.419189453125, -817.7157592773438
- 
  Tabs.AutoQuest:AddButton({
         Title = "Quest Spot",
         Description = "Tweens you to the quest.",
@@ -430,28 +429,25 @@ local tweenspeed = dist/tonumber(speed)
         print("Slider changed:", Value)
     end)
 
-    Slider:SetValue(100)
-    
-   local Toggle = Tabs.AutoQuest:AddToggle("MyToggles", {Title = "Toggle AutoQuest", Default = false })
+    Slider:SetValue(100) 
+ 
 
-   
-   
-    
-    
+ local Toggle = Tabs.AutoQuest:AddToggle("AutoSignquest", {Title = "Toggle", Default = false })
+
     Toggle:OnChanged(function()
-    tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1, Enum.EasingStyle.Linear)
-  print("Toggle changed:", Options.MyToggles.Value)
-  local player = game.Players.LocalPlayer
-local bodyvelocityenabled = true -- set this to false if you are getting kicked
-local Imput = game:GetService("UserInputService")
-local Plr = game.Players.LocalPlayer
-local Mouse = Plr:GetMouse()
-local tweenpart = game.Workspace.Game.Buyables["Cola"].Head.Position
-local player = game.Players.LocalPlayer
-local currentquest = player.PlayerGui.QuestGui.Stuff.ActiveQuest.Value
+    print("Toggle changed:", Options.AutoSignquest.Value)
+    while Options.AutoSignquest.Value do
+local currentQuest = game:GetService("Players").LocalPlayer.PlayerGui.QuestGui.Stuff.ActiveQuest.Value
+local objective = game:GetService("Players").LocalPlayer.PlayerGui.QuestGui.Stuff.QuestObjective.Value
 
---/////////////
-function getquest(Quest)
+if currentQuest ~= Stylist and objective ~= "Decorate the city with 5 posters" then
+print("not the quest")
+game:GetService("ReplicatedStorage"):WaitForChild("Cancel"):FireServer()
+end
+
+
+
+if currentQuest == "None" then
 for i,v in pairs(game.workspace.Game.Questboards:GetDescendants()) do
 if v:FindFirstChild("ClickDetector") then
 v.ClickDetector.MaxActivationDistance = 999999999999999
@@ -459,33 +455,43 @@ task.wait(0)
 fireclickdetector(v.ClickDetector)
 end
 end
-end
-
-while Options.MyToggles.Value do
-local player = game.Players.LocalPlayer
-local currentquest = player.PlayerGui.QuestGui.Stuff.QuestObjective.Value
-local ActiveQuest = player.PlayerGui.QuestGui.Stuff.ActiveQuest.Value
-if currentquest == "Decorate the city with 5 posters" and ActiveQuest == "Stylist" then
+else
+if currentQuest == "Stylist" and objective == "Decorate the city with 5 posters" then
+print("got it")
 for i,v in pairs(workspace.Game.Minimal_Quest_Objects.Posters:GetChildren()) do
 if (player.Character.HumanoidRootPart.Position - v.Position).Magnitude <= 100 then
 if v.Decal.Transparency == 1 then
+print("hi")
+local char = game.Players.LocalPlayer.Character
+local hm = char.HumanoidRootPart
+local dist = (hm.Position - v.Position).magnitude
+local tweenspeed = dist/tonumber(speed)
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
 tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(v.Position)})
 tween:Play()
 fireproximityprompt(v.ProximityPrompt)
 end
 end
 end
-else 
-game:GetService("ReplicatedStorage"):WaitForChild("Cancel"):FireServer()
-wait(0.1)
-getquest()
-
-
 end
-wait()
-end
-
+end    
+    
+    
+    
+    
+    
+    task.wait()
+    end
     end)
+
+    Options.AutoSignquest:SetValue(false)
+
+
+
+
+
+
+
 
 
 
