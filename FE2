@@ -89,7 +89,7 @@ local tweenspeed = dist/tonumber(speed)
 tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
 tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(p.Head.Position)})
  tween:Play()
- local playbackState = tween.Completed:Wait()
+local playbackState = tween.Completed:Wait()
  player.Character.Humanoid:UnequipTools()
  player.Character.HumanoidRootPart.Anchored = true
  fireclickdetector(game.Workspace.Game.Buyables[autobuy].Head.ClickDetector)
@@ -486,80 +486,6 @@ wait()
 end
 
     end)
-Options.MyToggles:SetValue(false)
-
-Tabs.AutoQuest:AddButton({
-        Title = "Dirt Spot quest",
-        Description = "Tweens you to the quest.",
-        Callback = function()
-            Window:Dialog({
-                Title = "Tween",
-                Content = "Everyone will see this.",
-                Buttons = {
-                    {
-                        Title = "Confirm",
-                        Callback = function()
-local char = game.Players.LocalPlayer.Character
-local pos = Vector3.new(29.877267837524414, 1229.296875, -763.1006469726562)
-local hm = char.HumanoidRootPart
-local dist = (hm.Position - pos).magnitude
-local tweenspeed = dist/tonumber(speed)
-                          
-                          print("Confirmed the dialog.")
-                           tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
-                           tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(29.877267837524414, 1229.296875, -763.1006469726562)})
-                            tween:Play()
-                        end
-                    },
-                    {
-                        Title = "Cancel",
-                        Callback = function()
-                            print("Cancelled the dialog.")
-                        end
-                    }
-                }
-            })
-        end
-    })
- local Toggle = Tabs.AutoQuest:AddToggle("DirtToggle", {Title = "Toggle AutoQuest", Default = false })
-Toggle:OnChanged(function()
-    tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(1, Enum.EasingStyle.Linear)
-  print("Toggle changed:", Options.DirtToggle.Value)
-  local player = game.Players.LocalPlayer
-local bodyvelocityenabled = true -- set this to false if you are getting kicked
-local Imput = game:GetService("UserInputService")
-local Plr = game.Players.LocalPlayer
-local Mouse = Plr:GetMouse()
-local tweenpart = game.Workspace.Game.Buyables["Cola"].Head.Position
-local player = game.Players.LocalPlayer
-local currentquest = player.PlayerGui.QuestGui.Stuff.ActiveQuest.Value
-
-while Options.DirtToggle.Value do
-local player = game.Players.LocalPlayer
-local currentquest = player.PlayerGui.QuestGui.Stuff.QuestObjective.Value
-local ActiveQuest = player.PlayerGui.QuestGui.Stuff.ActiveQuest.Value
-if currentquest == "Clean up 10 dirt for the city" and ActiveQuest == "Looking for cleaner" then
-for i,v in pairs(workspace.Game.Minimal_Quest_Objects.Dirt:GetChildren()) do
-if (player.Character.HumanoidRootPart.Position - v.Position).Magnitude <= 100 then
-if v.Decal.Transparency == 0 then
-tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(v.Position)})
-tween:Play()
-fireproximityprompt(v.ProximityPrompt)
-end
-end
-end
-else 
-game:GetService("ReplicatedStorage"):WaitForChild("Cancel"):FireServer()
-wait(0.1)
-getquest()
-
-
-end
-wait()
-end
-
-end)
-
 
 
 
