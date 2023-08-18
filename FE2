@@ -15,6 +15,7 @@ local drinkp
 
 --//spar values
 local Sparlocation 
+local autobuylocation
 
 
 
@@ -53,6 +54,21 @@ local Options = Fluent.Options
 
 do
 --//autobuy
+Tabs.Autobuy:AddButton({
+        Title = "Set Position",
+        Description = "Takes you back to ur original position.",
+        Callback = function()
+         
+         autobuylocation = player.Character.HumanoidRootPart.Position
+         
+        end
+    })
+
+
+
+
+
+
 local Toggle = Tabs.Autobuy:AddToggle("autobuytoggle", {Title = "Toggle", Default = false })
 
     Toggle:OnChanged(function()
@@ -82,6 +98,9 @@ tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.
 local total = player.Backpack:WaitForChild(autobuy).Amount.Value
  until total == 10
   player.Character.HumanoidRootPart.Anchored = false
+  tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
+tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(autobuylocation)})
+ tween:Play()
  print("done")
 end
 end
