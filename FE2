@@ -4,6 +4,10 @@ local currentdrinks = ""
 local foodP 
 local drinkp 
 
+--//spar values
+local Sparlocation 
+
+
 
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -12,6 +16,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 local ScriptVersion = "0.0.1"
 local player = game:GetService("Players").LocalPlayer
 local speed = 100
+local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local Window = Fluent:CreateWindow({
     Title = "rec.xyz " .. ScriptVersion,
@@ -26,6 +31,7 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     AutoQuest = Window:AddTab({ Title = "AutoQuest", Icon = "newspaper" }),
+    autospar = Window:AddTab({ Title = "Auto Spar", Icon = "grab" }),
     autoroad = Window:AddTab({ Title = "Auto Roadwork", Icon = "accessibility" }),
     Shadow = Window:AddTab({ Title = "Shadow Farm", Icon = "person-standing" }),
     AutoEat = Window:AddTab({ Title = "Auto Eat", Icon = "carrot" }),
@@ -36,6 +42,111 @@ local Tabs = {
 local Options = Fluent.Options
 
 do
+--//spar
+Tabs.autospar:AddButton({
+        Title = "Set bag position",
+        Description = "Make sure u set this before training.",
+        Callback = function()
+           Sparlocation = player.Character.HumanoidRootPart.Position
+           print(Sparlocation)
+        end
+    })
+
+local Keybind = Tabs.autospar:AddKeybind("Keybind", {
+        Title = "KeyBind",
+        Mode = "Toggle", -- Always, Toggle, Hold
+        Default = "LeftControl", -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+
+        -- Occurs when the keybind is clicked, Value is `true`/`false`
+        Callback = function(Value)
+            print("Keybind clicked!", Value)
+        end,
+
+        -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
+        ChangedCallback = function(New)
+            print("Keybind changed!", New)
+        end
+    })
+
+
+
+
+
+
+
+
+
+local Toggle = Tabs.autospar:AddToggle("Spartoggle", {Title = "Toggle auto spar", Default = false })
+
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Options.Spartoggle.Value)
+       while Options.Spartoggle.Value do
+       local player = game.Players.LocalPlayer 
+local character = player.Character
+local hm = character.Humanoid
+local hrp = character.HumanoidRootPart
+local fist = player.Backpack:FindFirstChild("Fists")
+local characterfist = character:FindFirstChild("Fists")
+local sparr = player.Backpack:FindFirstChild("Spar Training")
+for i,bags in pairs(workspace.Live:GetChildren()) do
+if bags.Name == "Boxing Bag" then
+local distance = (character.HumanoidRootPart.Position - bags.HumanoidRootPart.Position).Magnitude
+if distance <= 6 and character:FindFirstChild("TRAINING_GLOVES [2372]") then 
+hrp.CFrame = CFrame.lookAt(hrp.Position, Vector3.new(bags.HumanoidRootPart.Position.X, hrp.Position.Y, bags.HumanoidRootPart.Position.Z))
+hm:EquipTool(fist)
+VirtualInputManager:SendMouseButtonEvent(1, 1, 0, true, game, 1)
+VirtualInputManager:SendMouseButtonEvent(1, 1, 0, false, game, 1)
+else 
+print("too far")
+if Sparlocation == nill then
+else
+game.Players.LocalPlayer.Character.Humanoid:MoveTo(Sparlocation)
+end
+end
+end
+end
+
+for i, spar in pairs(workspace.Game.Buyables:GetChildren()) do 
+    if spar.Name == "Spar Training" then
+        local distance = (character.HumanoidRootPart.Position - spar.Head.Position).Magnitude
+        if distance <= 10 and character:FindFirstChild("TRAINING_GLOVES [2372]") then
+            print(" gloves")
+            print(distance)
+        elseif distance <= 10 and not sparr and not character:FindFirstChild("TRAINING_GLOVES [2372]") then
+            fireclickdetector(spar.Head.ClickDetector)
+            task.wait(0.5)
+            local sparr = player.Backpack:FindFirstChild("Spar Training") -- Assuming "sparr" is the tool you want to equip
+            if sparr then
+                hm:EquipTool(sparr)
+                sparr:Activate()
+                print("pollo")
+           end 
+        end
+    end
+end
+task.wait()
+end
+        
+        
+        
+        
+    end)
+
+    Options.Spartoggle:SetValue(false)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 --//Roadwork
 local RSpeed = 100
  local Slider = Tabs.autoroad:AddSlider("Slider", {
