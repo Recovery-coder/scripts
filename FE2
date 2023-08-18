@@ -457,11 +457,9 @@ end
 end
 else
 if currentQuest == "Stylist" and objective == "Decorate the city with 5 posters" then
-print("got it")
 for i,v in pairs(workspace.Game.Minimal_Quest_Objects.Posters:GetChildren()) do
 if (player.Character.HumanoidRootPart.Position - v.Position).Magnitude <= 100 then
 if v.Decal.Transparency == 1 then
-print("hi")
 local char = game.Players.LocalPlayer.Character
 local hm = char.HumanoidRootPart
 local dist = (hm.Position - v.Position).magnitude
