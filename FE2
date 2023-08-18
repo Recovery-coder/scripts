@@ -244,11 +244,6 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Dialo
 end
     Toggle:OnChanged(function()
         print("Toggle changed:", Options.RoadToggle.Value)
-       if Options.RoadToggle.Value then
-       game.Players.LocalPlayer.Character.Humanoid.HipHeight = 4
-       else
-       game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
-       end
        
        while Options.RoadToggle.Value do
         local char = game.Players.LocalPlayer.Character
@@ -273,7 +268,7 @@ local pos = Vector3.new(v.Position)
 local hm = char.HumanoidRootPart
 local dist = (hm.Position - pos).magnitude
 local tweenspeed = dist/tonumber(RSpeed)
-local Speed = 70
+local Speed = 80
 function GetTime(Distance, Speed)
 	-- Time = Distance / Speed
 	local Time = Distance / Speed
@@ -287,8 +282,12 @@ game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
                          tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(Time, Enum.EasingStyle.Linear)
               tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(v.Position)})
                           tween:Play()
-                           
+                           local bv = Instance.new("BodyVelocity")
+bv.Parent = hm
+bv.MaxForce = Vector3.new(100000,100000,100000)
+bv.Velocity = Vector3.new(0,0,0)
                           local playbackState = tween.Completed:Wait()
+                          bv:Destroy()
                           print("going")
                           end
                      
