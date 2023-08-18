@@ -44,6 +44,7 @@ local Tabs = {
     autoroad = Window:AddTab({ Title = "Auto Roadwork", Icon = "accessibility" }),
     Shadow = Window:AddTab({ Title = "Shadow Farm", Icon = "person-standing" }),
     AutoEat = Window:AddTab({ Title = "Auto Eat", Icon = "carrot" }),
+    Autobuy = Window:AddTab({ Title = "Auto buy", Icon = "shopping-cart" }),
     Misc = Window:AddTab({ Title = "Misc", Icon = "rotate-3d" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
@@ -51,6 +52,61 @@ local Tabs = {
 local Options = Fluent.Options
 
 do
+--//autobuy
+local Toggle = Tabs.Autobuy:AddToggle("autobuytoggle", {Title = "Toggle", Default = false })
+
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Options.autobuytoggle.Value)
+     while Options.autobuytoggle.Value do
+local autobuy = "Sports Drink"
+
+if player.Backpack:FindFirstChild(autobuy) or player.Character:FindFirstChild(autobuy) then
+print("F")
+ player.Character.HumanoidRootPart.Anchored = false
+else
+for i,p in pairs(workspace.Game.Buyables:GetChildren()) do
+if p.Name == autobuy then
+local char = game.Players.LocalPlayer.Character
+local hm = char.HumanoidRootPart
+local dist = (hm.Position - p.Head.Position).magnitude
+local tweenspeed = dist/tonumber(speed)
+tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
+tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(p.Head.Position)})
+ tween:Play()
+ local playbackState = tween.Completed:Wait()
+ player.Character.HumanoidRootPart.Anchored = true
+ fireclickdetector(game.Workspace.Game.Buyables[autobuy].Head.ClickDetector)
+ repeat
+ wait()
+ fireclickdetector(game.Workspace.Game.Buyables[autobuy].Head.ClickDetector)
+local total = player.Backpack:WaitForChild(autobuy).Amount.Value
+ until total == 10
+  player.Character.HumanoidRootPart.Anchored = false
+ print("done")
+end
+end
+end
+     
+     
+     
+     task.wait()
+     end
+    end)
+
+    Options.autobuytoggle:SetValue(false)
+
+
+
+
+
+
+
+
+
+
+
+
+
 --//spar
 Tabs.autospar:AddButton({
         Title = "Set bag position",
