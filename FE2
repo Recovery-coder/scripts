@@ -102,7 +102,6 @@ local total = player.Backpack:WaitForChild(autobuy).Amount.Value
   tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(tweenspeed, Enum.EasingStyle.Linear)
 tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(autobuylocation)})
  tween:Play()
- print("done")
 end
 end
 end
@@ -451,7 +450,7 @@ if currentQuest == "None" then
 for i,v in pairs(game.workspace.Game.Questboards:GetDescendants()) do
 if v:FindFirstChild("ClickDetector") then
 v.ClickDetector.MaxActivationDistance = 999999999999999
-task.wait(0)
+task.wait(1)
 fireclickdetector(v.ClickDetector)
 end
 end
