@@ -655,7 +655,7 @@ end
 local MultiDropdown = Tabs.AutoEat:AddDropdown("MultiDropdown", {
         Title = "Auto Drink",
         Description = "You can select multiple Drinks.",
-        Values = {"Cola", "Sports Drink", "Vanilla Icecream", "Strawberry Icecream"},
+        Values = {"Cola", "Sports Drink", "Vanilla Icecream", "Strawberry Icecream","Strawberry Smoothie","Orange Smoothie","Ice Pop"},
         Multi = true,
         Default = {},
     })
