@@ -14,6 +14,7 @@ local Window = Fluent:CreateWindow({
 
 --Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
 local Tabs = {
+    Autofarm = Window:AddTab({ Title = "Autofarm", Icon = "" }),
     IslandTp = Window:AddTab({ Title = "Island Tp", Icon = "" }),
     Autofish = Window:AddTab({ Title = "Autofish", Icon = "" }),
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
@@ -57,7 +58,61 @@ local Toggle = Tabs.Autofish:AddToggle("Autofish", {Title = "Autofish", Default 
    task.wait()
    end
    end)
-   
+--// Autofarm
+
+ local Keybind = Tabs.Autofarm:AddKeybind("Keybind", {
+        Title = "KeyBind",
+        Mode = "Toggle", -- Always, Toggle, Hold
+        Default = "E", -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+
+        -- Occurs when the keybind is clicked, Value is `true`/`false`
+        Callback = function(Value)
+            print("Keybind clicked!", Value)
+        end,
+
+        -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
+        ChangedCallback = function(New)
+            print("Keybind changed!", New)
+        end
+    })
+
+    -- OnClick is only fired when you press the keybind and the mode is Toggle
+    -- Otherwise, you will have to use Keybind:GetState()
+    Keybind:OnClick(function()
+        print("Keybind clicked:", Keybind:GetState())
+    end)
+
+    Keybind:OnChanged(function()
+        print("Keybind changed:", Keybind.Value)
+    end)
+
+    task.spawn(function()
+        while true do
+            wait()
+
+            -- example for checking if a keybind is being pressed
+            local state = Keybind:GetState()
+            if state then
+              for i,v in pairs(workspace.Mobs:GetChildren()) do
+for i,p in pairs(v:GetChildren()) do
+if p:FindFirstChild("HumanoidRootPart") then
+local args = {
+    [1] = p.HumanoidRootPart,
+    [2] = "2",
+    [3] = 2
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SwordHitEvent"):FireServer(unpack(args))
+
+
+end
+end
+end  
+            end
+
+            if Fluent.Unloaded then break end
+        end
+    end)
    
    
    
