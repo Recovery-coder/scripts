@@ -1,14 +1,14 @@
 local Island = {
-    FooshaVillage = "-5491.0478515625, 133.31088256835938, -423.016845703125";
-    WhiskeyPeak = "-2965.504638671875, 146.4076690673828, 4801.00830078125";
-    ShellsTown = "-10681.873046875, 338.6473388671875, 3278.840576171875";
-    MapleVillage = "-13053.802734375, 187.5104217529297, -1383.5128173828125";
-    OrangeTown = "-7268.453125, 189.96429443359375, -3671.653564453125";
-    BaratieRestaurant = "-11290.404296875, 79.99518585205078, -5463.94287109375";
-    LongGatePark = "-12412.45703125, 143.00128173828125, -9371.236328125";
-    RogueTown = "-17322.025390625, 281.48126220703125, -679.4442138671875";
-    Arcenkaina = "-2000.98828125, 131.62831115722656, -8816.5693359375";
-    Arena = "-8940.380859375, 273.39263916015625, 3.5847909450531006"
+    FooshaVillage = Vector3.new(-5491.0478515625, 133.31088256835938, -423.016845703125);
+    WhiskeyPeak = Vector3.new(-2965.504638671875, 146.4076690673828, 4801.00830078125);
+    ShellsTown = Vector3.new(-10681.873046875, 338.6473388671875, 3278.840576171875);
+    MapleVillage = Vector3.new(-13053.802734375, 187.5104217529297, -1383.5128173828125);
+    OrangeTown = Vector3.new(-7268.453125, 189.96429443359375, -3671.653564453125);
+    BaratieRestaurant = Vector3.new(-11290.404296875, 79.99518585205078, -5463.94287109375);
+    LongGatePark = Vector3.new(-12412.45703125, 143.00128173828125, -9371.236328125);
+    RogueTown = Vector3.new(-17322.025390625, 281.48126220703125, -679.4442138671875);
+    Arcenkaina = Vector3.new(-2000.98828125, 131.62831115722656, -8816.5693359375);
+    Arena = Vector3.new(-8940.380859375, 273.39263916015625, 3.5847909450531006)
 }
 
 
@@ -63,14 +63,34 @@ local player = game.Players.LocalPlayer
     end)
      
      Tabs.IslandTp:AddButton({
-        Title = "Teleport",
+        Title = "Set spawn",
         Description = "",
         Callback = function()
          player.Character.Head:Destroy()   
         end
     })
+     
+     local chosenisland  
+     
+     local Dropdown = Tabs.IslandTp:AddDropdown("Dropdown", {
+        Title = "Dropdown",
+        Values = {"FooshaVillage", "WhiskeyPeak", "ShellsTown", "MapleVillage", "OrangeTown", "BaratieRestaurant", "RogueTown", "LongGatePark", "Arcenkaina", "Arena"},
+        Multi = false,
+    })
     
+    Dropdown:OnChanged(function(Value)
+        print("Dropdown changed:", Value)
+        print(Island[Value])
+        chosenisland = Island[Value]
+    end)
     
+      Tabs.IslandTp:AddButton({
+        Title = "Teleport",
+        Description = "",
+        Callback = function()
+           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(chosenisland)
+        end
+    })
 
 --// Autofish
 local Toggle = Tabs.Autofish:AddToggle("Autofish", {Title = "Autofish", Default = false })
